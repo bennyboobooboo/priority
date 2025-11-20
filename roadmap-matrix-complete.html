@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sera Labs Roadmap - Impact vs Effort Matrix</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+      color: #333;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      color: white;
+      margin-bottom: 40px;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+
+    .subtitle {
+      font-size: 1.2rem;
+      opacity: 0.9;
+    }
+
+    .matrix-container {
+      background: white;
+      border-radius: 20px;
+      padding: 60px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      position: relative;
+    }
+
+    .matrix {
+      width: 100%;
+      height: 700px;
+      position: relative;
+      border-left: 3px solid #333;
+      border-bottom: 3px solid #333;
+    }
+
+    .axis-label {
+      position: absolute;
+      font-weight: 600;
+      color: #555;
+      font-size: 1.1rem;
+    }
+
+    .axis-label.x {
+      bottom: -40px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .axis-label.y {
+      top: 50%;
+      left: -40px;
+      transform: translateY(-50%) rotate(-90deg);
+      transform-origin: center;
+    }
+
+    .bubble {
+      position: absolute;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: white;
+      text-align: center;
+      padding: 8px;
+      line-height: 1.2;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      transform: translate(-50%, -50%);
+    }
+
+    .bubble:hover {
+      transform: translate(-50%, -50%) scale(1.2);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+      z-index: 100;
+    }
+
+    .bubble.priority-1 {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border: 3px solid #fbbf24;
+    }
+
+    .bubble.priority-2 {
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      border: 3px solid #fbbf24;
+    }
+
+    .bubble.priority-3 {
+      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      border: 3px solid #fbbf24;
+    }
+
+    .bubble.other {
+      background: #e5e7eb;
+      color: #6b7280;
+      border: 2px solid #d1d5db;
+    }
+
+    .bubble.other:hover {
+      background: #d1d5db;
+    }
+
+    .bubble.small {
+      width: 50px;
+      height: 50px;
+      font-size: 0.6rem;
+    }
+
+    .bubble.medium {
+      width: 70px;
+      height: 70px;
+      font-size: 0.65rem;
+    }
+
+    .bubble.large {
+      width: 120px;
+      height: 120px;
+      font-size: 0.85rem;
+    }
+
+    .tooltip {
+      position: absolute;
+      background: rgba(0,0,0,0.95);
+      color: white;
+      padding: 15px 20px;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s;
+      z-index: 1000;
+      max-width: 350px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+
+    .tooltip.show {
+      opacity: 1;
+    }
+
+    .tooltip-title {
+      font-weight: 700;
+      margin-bottom: 8px;
+      font-size: 1.1rem;
+      color: #fbbf24;
+    }
+
+    .tooltip-detail {
+      margin: 5px 0;
+      line-height: 1.5;
+    }
+
+    .legend {
+      margin-top: 40px;
+      display: flex;
+      gap: 30px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .legend-bubble {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      border: 2px solid #fbbf24;
+    }
+
+    .legend-text {
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Sera Labs Product Roadmap</h1>
+      <p class="subtitle">Impact vs Effort Matrix - All Initiatives</p>
+    </header>
+
+    <div class="matrix-container">
+      <div class="matrix" id="matrix">
+        <div class="axis-label x">EFFORT (Time to Implement) →</div>
+        <div class="axis-label y">IMPACT (Business Value) →</div>
+      </div>
+
+      <div class="legend">
+        <div class="legend-item">
+          <div class="legend-bubble" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>
+          <span class="legend-text">Priority #1: Broccoli</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-bubble" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);"></div>
+          <span class="legend-text">Priority #2: Chirp</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-bubble" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);"></div>
+          <span class="legend-text">Priority #3: Heritage Phase 1</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="tooltip" id="tooltip">
+      <div class="tooltip-title" id="tooltip-title"></div>
+      <div class="tooltip-detail" id="tooltip-detail"></div>
+    </div>
+  </div>
+
+  <script>
+    const initiatives = [
+      // All other initiatives (rendered first, so they appear below)
+      { row: 3, name: "Tech Day at Glance", impact: 75, effort: 15, size: "small", class: "other", timeline: "Days", description: "Location, map, equipment, membership info." },
+      { row: 4, name: "Missed Opps Email", impact: 70, effort: 15, size: "small", class: "other", timeline: "Days", description: "Daily email of missed opportunities by tech." },
+      { row: 5, name: "Mgmt Missed Opps", impact: 65, effort: 15, size: "small", class: "other", timeline: "Days", description: "Management list of all missed opportunities." },
+      { row: 6, name: "Tech Missed Email", impact: 65, effort: 15, size: "small", class: "other", timeline: "Days", description: "Tech receives email of missed opportunities." },
+      { row: 7, name: "Membership Notice", impact: 60, effort: 15, size: "small", class: "other", timeline: "Days", description: "30 day membership lifecycle notice." },
+      { row: 8, name: "Post-Visit Survey", impact: 60, effort: 15, size: "small", class: "other", timeline: "Days", description: "Trigger-based survey (not polling)." },
+      { row: 9, name: "Tech Efficiency Digest", impact: 60, effort: 15, size: "small", class: "other", timeline: "Days", description: "Efficiency metrics digest." },
+      { row: 13, name: "Membership Tracker", impact: 65, effort: 15, size: "small", class: "other", timeline: "Days", description: "Track lifecycle stages." },
+      { row: 14, name: "Data Platform", impact: 90, effort: 45, size: "medium", class: "other", timeline: "Weeks", description: "Multi-location data hosting. Enterprise opportunity." },
+      { row: 15, name: "Call Scheduling Dash", impact: 70, effort: 15, size: "small", class: "other", timeline: "Days", description: "Daily/weekly by department dashboard." },
+      { row: 16, name: "Capacity Dashboard", impact: 70, effort: 15, size: "small", class: "other", timeline: "Days", description: "Remaining capacity based on tech availability." },
+      { row: 17, name: "Revenue Goals", impact: 70, effort: 15, size: "small", class: "other", timeline: "Days", description: "Revenue goal dashboards." },
+      { row: 18, name: "Call Quality", impact: 65, effort: 15, size: "small", class: "other", timeline: "Days", description: "Scheduling quality vs revenue targets." },
+      { row: 19, name: "Appt Quality", impact: 65, effort: 15, size: "small", class: "other", timeline: "Days", description: "Quality based on revenue potential." },
+      { row: 20, name: "Tech Quality Score", impact: 65, effort: 15, size: "small", class: "other", timeline: "Days", description: "Tech performance dashboards." },
+      { row: 21, name: "Tech Efficiency", impact: 65, effort: 15, size: "small", class: "other", timeline: "Days", description: "Billable vs worked vs revenue." },
+      { row: 22, name: "OpenAPIs", impact: 95, effort: 55, size: "medium", class: "other", timeline: "Weeks/Months", description: "CRUD APIs. Platform transformation." },
+      { row: 23, name: "Roll-up Reporting", impact: 75, effort: 15, size: "small", class: "other", timeline: "Days", description: "Cross-tenant portfolio reporting." },
+      { row: 24, name: "Missed Opps Remarket", impact: 60, effort: 25, size: "small", class: "other", timeline: "?", description: "Enter remarketing workflow." },
+      { row: 25, name: "Booking Rate", impact: 60, effort: 25, size: "small", class: "other", timeline: "?", description: "Call taking success rate reporting." },
+      { row: 26, name: "Mktg Scorecards", impact: 65, effort: 25, size: "small", class: "other", timeline: "?", description: "Track KPIs across marketing, tech, CSR." },
+      { row: 27, name: "Estimate Funnel", impact: 60, effort: 25, size: "small", class: "other", timeline: "?", description: "Conversion tracking by service category." },
+      { row: 30, name: "Google Map Book", impact: 55, effort: 80, size: "small", class: "other", timeline: "Months", description: "Book button from Google Maps search." },
+      { row: 31, name: "SEO Backlink", impact: 55, effort: 80, size: "small", class: "other", timeline: "Months", description: "Revenue driver via website platform." },
+      { row: 32, name: "Website Hosting", impact: 60, effort: 65, size: "small", class: "other", timeline: "Weeks/Months", description: "Top of funnel management." },
+      { row: 33, name: "Customer Acq Campaign", impact: 50, effort: 70, size: "small", class: "other", timeline: "", description: "Marketing person + N8N." },
+      { row: 36, name: "Integration Onboard", impact: 55, effort: 25, size: "small", class: "other", timeline: "?", description: "New integrations onboarding." },
+      { row: 37, name: "Bulk Import", impact: 65, effort: 35, size: "small", class: "other", timeline: "Weeks", description: "Customer migration tool." },
+      { row: 40, name: "Inventory Mgmt", impact: 60, effort: 35, size: "small", class: "other", timeline: "Weeks", description: "Unleashed Software integration." },
+      { row: 41, name: "Booking Forms", impact: 75, effort: 20, size: "small", class: "other", timeline: "Days/Weeks", description: "Embeddable forms without login." },
+      { row: 42, name: "Quoting Solution", impact: 70, effort: 15, size: "small", class: "other", timeline: "Days", description: "OnCallAir.com & Sales Builder Pro." },
+      { row: 43, name: "VOIP Solutions", impact: 50, effort: 25, size: "small", class: "other", timeline: "Days/Weeks", description: "Call Rails, Ring Central." },
+      { row: 44, name: "Texting 360", impact: 65, effort: 60, size: "small", class: "other", timeline: "Weeks/Months", description: "Twillio chat capabilities." },
+      { row: 45, name: "Fleet Tracking", impact: 55, effort: 25, size: "small", class: "other", timeline: "Days/Weeks", description: "Fleet Pro, Fleetio, Samsara." },
+      { row: 46, name: "Answering Services", impact: 55, effort: 30, size: "small", class: "other", timeline: "?", description: "Partnership or install." },
+      { row: 47, name: "Email Automation", impact: 55, effort: 20, size: "small", class: "other", timeline: "Days/Weeks", description: "AI extraction of appointments." },
+      { row: 48, name: "NetSuite", impact: 85, effort: 60, size: "small", class: "other", timeline: "Weeks/Months", description: "Replace QBO. Major pain point." },
+      { row: 49, name: "Camp Digital", impact: 60, effort: 55, size: "small", class: "other", timeline: "Weeks/Months", description: "Marketing & customer acquisition." },
+      { row: 50, name: "Google Reviews", impact: 55, effort: 20, size: "small", class: "other", timeline: "Days/Weeks", description: "Beyond PulseM reviews." },
+      { row: 51, name: "Custom Forms", impact: 55, effort: 20, size: "small", class: "other", timeline: "Days/Weeks", description: "Intake/tech surveys via Kobotoolbox." },
+      { row: 53, name: "JB Warranties", impact: 50, effort: 25, size: "small", class: "other", timeline: "Days/Weeks", description: "Deeper integration needed." },
+      { row: 54, name: "HubSpot", impact: 55, effort: 25, size: "small", class: "other", timeline: "Days/Weeks", description: "N8N, WebHooks, APIs." },
+      { row: 55, name: "Podium", impact: 55, effort: 25, size: "small", class: "other", timeline: "Days/Weeks", description: "Deepen FSM integration." },
+      { row: 56, name: "VOIP 59", impact: 50, effort: 25, size: "small", class: "other", timeline: "Days/Weeks", description: "Generic VOIP integration." },
+      { row: 57, name: "Ring Central", impact: 50, effort: 25, size: "small", class: "other", timeline: "Days/Weeks", description: "Generic VOIP integration." },
+      { row: 58, name: "Rilla.com", impact: 45, effort: 30, size: "small", class: "other", timeline: "?", description: "Ride along with techs." },
+      { row: 59, name: "CompanyCam", impact: 50, effort: 25, size: "small", class: "other", timeline: "Days/Weeks", description: "Video/picture capture of equipment." },
+      { row: 60, name: "Price Book Mfg PDFs", impact: 55, effort: 40, size: "small", class: "other", timeline: "Days/Weeks", description: "OCR and extraction tools." },
+      { row: 61, name: "Pricebook Reload", impact: 50, effort: 30, size: "small", class: "other", timeline: "Days/Weeks", description: "Round trip tooling for CX teams." },
+      { row: 62, name: "SafetyCulture", impact: 65, effort: 20, size: "small", class: "other", timeline: "Days/Weeks", description: "N8N, WebHooks, APIs." },
+      { row: 63, name: "Go High Level", impact: 60, effort: 30, size: "small", class: "other", timeline: "Days/Weeks", description: "CRM with photos, marketing, proposals." },
+      { row: 66, name: "AI Match - New", impact: 80, effort: 75, size: "small", class: "other", timeline: "Weeks/Months", description: "AI customer-to-tech matching (new)." },
+      { row: 67, name: "AI Match - Existing", impact: 80, effort: 75, size: "small", class: "other", timeline: "Weeks/Months", description: "AI customer-to-tech matching (existing)." },
+      { row: 68, name: "Photo to Equipment", impact: 70, effort: 25, size: "small", class: "other", timeline: "Days/Weeks", description: "AI equipment identification." },
+      { row: 69, name: "Call Summaries", impact: 60, effort: 15, size: "small", class: "other", timeline: "Days", description: "To top of scheduling board." },
+      { row: 70, name: "AI Task Descriptions", impact: 60, effort: 30, size: "small", class: "other", timeline: "Days/Weeks", description: "Pull descriptions, photos from internet." },
+      { row: 71, name: "Social Media Bot", impact: 70, effort: 70, size: "small", class: "other", timeline: "Weeks/Months", description: "Facebook monitoring & alerting." },
+      { row: 74, name: "Auto-Activate Member", impact: 60, effort: 20, size: "small", class: "other", timeline: "Days/Weeks", description: "When invoice completed." },
+      { row: 75, name: "Member Setup Notif", impact: 60, effort: 20, size: "small", class: "other", timeline: "Days/Weeks", description: "Auto notification with details." },
+      { row: 76, name: "Integration Tools", impact: 65, effort: 20, size: "small", class: "other", timeline: "Days/Weeks", description: "ActiveCampaign, Stripe, etc." },
+      { row: 77, name: "Push/Pull Data", impact: 60, effort: 20, size: "small", class: "other", timeline: "Days/Weeks", description: "Key data for automation." },
+      { row: 78, name: "On Our Way Control", impact: 60, effort: 20, size: "small", class: "other", timeline: "Days/Weeks", description: "Full control of automated comms." },
+      { row: 79, name: "Auto Follow-ups", impact: 65, effort: 20, size: "small", class: "other", timeline: "Days/Weeks", description: "Tied to triggers in Sera." },
+      { row: 80, name: "Auto-text Missed", impact: 55, effort: 20, size: "small", class: "other", timeline: "Days/Weeks", description: "After missed calls (like CallRail)." },
+
+      // Top 3 Priorities (rendered last, so they appear on top with higher z-index)
+      { row: "Broccoli", name: "Broccoli", impact: 78, effort: 25, size: "large", class: "priority-1", timeline: "Weeks", billable: "Yes", description: "AI SDR and booking software. Automates lead qualification and appointment scheduling." },
+      { row: 52, name: "Chirp", impact: 60, effort: 20, size: "large", class: "priority-2", timeline: "Days/Weeks", billable: "?", description: "Limited integrations today need deeper implementation." },
+      { row: "Heritage", name: "Heritage Phase 1", impact: 90, effort: 30, size: "large", class: "priority-3", timeline: "Weeks", billable: "Yes", description: "High-impact foundational work. Critical infrastructure enabling future growth." }
+    ];
+
+    const matrix = document.getElementById('matrix');
+    const tooltip = document.getElementById('tooltip');
+    const tooltipTitle = document.getElementById('tooltip-title');
+    const tooltipDetail = document.getElementById('tooltip-detail');
+
+    initiatives.forEach(initiative => {
+      const bubble = document.createElement('div');
+      bubble.className = `bubble ${initiative.size} ${initiative.class}`;
+      bubble.style.left = `${initiative.effort}%`;
+      bubble.style.bottom = `${initiative.impact}%`;
+      bubble.textContent = initiative.name;
+      
+      bubble.addEventListener('mouseenter', (e) => {
+        tooltipTitle.textContent = `${initiative.name} (Row ${initiative.row})`;
+        tooltipDetail.innerHTML = `
+          <div><strong>Timeline:</strong> ${initiative.timeline || 'TBD'}</div>
+          <div><strong>Billable:</strong> ${initiative.billable || '?'}</div>
+          <div style="margin-top: 8px;">${initiative.description}</div>
+        `;
+        tooltip.classList.add('show');
+      });
+
+      bubble.addEventListener('mousemove', (e) => {
+        tooltip.style.left = e.pageX + 20 + 'px';
+        tooltip.style.top = e.pageY - 20 + 'px';
+      });
+
+      bubble.addEventListener('mouseleave', () => {
+        tooltip.classList.remove('show');
+      });
+
+      matrix.appendChild(bubble);
+    });
+  </script>
+</body>
+</html>
