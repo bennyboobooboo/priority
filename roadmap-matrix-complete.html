@@ -13,7 +13,7 @@
 
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: #ffffff;
       min-height: 100vh;
       padding: 20px;
       color: #333;
@@ -26,7 +26,7 @@
 
     header {
       text-align: center;
-      color: white;
+      color: #1e293b;
       margin-bottom: 40px;
     }
 
@@ -42,10 +42,9 @@
     }
 
     .matrix-container {
-      background: white;
-      border-radius: 20px;
+      background: transparent;
+      border-radius: 0;
       padding: 60px;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
       position: relative;
     }
 
@@ -53,15 +52,15 @@
       width: 100%;
       height: 700px;
       position: relative;
-      border-left: 3px solid #333;
-      border-bottom: 3px solid #333;
+      border-left: 2px solid #e2e8f0;
+      border-bottom: 2px solid #e2e8f0;
     }
 
     .axis-label {
       position: absolute;
-      font-weight: 600;
-      color: #555;
-      font-size: 1.1rem;
+      font-weight: 500;
+      color: #64748b;
+      font-size: 1rem;
     }
 
     .axis-label.x {
@@ -103,27 +102,28 @@
 
     .bubble.priority-1 {
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      border: 3px solid #fbbf24;
+      border: 2.5px solid #06b6d4;
     }
 
     .bubble.priority-2 {
       background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-      border: 3px solid #fbbf24;
+      border: 2.5px solid #06b6d4;
     }
 
     .bubble.priority-3 {
       background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-      border: 3px solid #fbbf24;
+      border: 2.5px solid #06b6d4;
     }
 
     .bubble.other {
-      background: #e5e7eb;
-      color: #6b7280;
-      border: 2px solid #d1d5db;
+      background: #f8fafc;
+      color: #475569;
+      border: 1.5px solid #e2e8f0;
     }
 
     .bubble.other:hover {
-      background: #d1d5db;
+      background: #f1f5f9;
+      border-color: #cbd5e1;
     }
 
     .bubble.small {
@@ -167,7 +167,7 @@
       font-weight: 700;
       margin-bottom: 8px;
       font-size: 1.1rem;
-      color: #fbbf24;
+      color: #06b6d4;
     }
 
     .tooltip-detail {
@@ -193,7 +193,7 @@
       width: 30px;
       height: 30px;
       border-radius: 50%;
-      border: 2px solid #fbbf24;
+      border: 2px solid #06b6d4;
     }
 
     .legend-text {
